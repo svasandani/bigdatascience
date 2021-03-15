@@ -1,2 +1,3 @@
 *.class
-sentiment140.csv
+*.csv
+/bin/
