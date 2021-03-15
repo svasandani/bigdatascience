@@ -6,8 +6,11 @@ public class HelloWorld {
 
         Scanner input = new Scanner(System.in);
 
+        int reps = input.nextInt();
         String token = input.nextLine();
 
-        System.out.println(token);
+        for (int i = 0; i < reps; i++) {
+            System.out.println(token);
+        }
     }
 }
