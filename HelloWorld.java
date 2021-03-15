@@ -12,5 +12,7 @@ public class HelloWorld {
         for (int i = 0; i < reps; i++) {
             System.out.println(token);
         }
+        
+        input.close();
     }
 }
