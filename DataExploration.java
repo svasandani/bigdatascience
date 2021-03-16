@@ -8,7 +8,7 @@ public class DataExploration {
 	final static int TEXT_COLUMN = 5;
 
 	public static void main(String[] args) throws FileNotFoundException {
-		CSVParser c = new CSVParser("sentiment500.csv");
+		CSVParser c = new CSVParser("sentiment140.csv");
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
