@@ -12,6 +12,8 @@ public class DataExploration {
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
+		System.out.println("Separating text...");
+		
 		String text = "";
 		
 		for (String[] s : table) {
@@ -98,6 +100,7 @@ class CSVParser {
 	private ArrayList<String[]> table;
 	
 	public CSVParser(String filename) {
+		System.out.println("New parser from " + filename);
 		this.filename = filename;
 	}
 	
@@ -124,6 +127,8 @@ class CSVParser {
 	}
 	
 	public ArrayList<String[]> parse() throws FileNotFoundException {
+		System.out.println("Parsing CSV...");
+		
 		Scanner input = new Scanner(new File(this.filename));
 		
 		ArrayList<String[]> table = new ArrayList<String[]>();
