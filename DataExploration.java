@@ -12,8 +12,8 @@ public class DataExploration {
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
-		Map<String, Integer> hashtags = trimMap(sortMap(collectHashtags(table)), 10);
-		Map<String, Integer> mentions = trimMap(sortMap(collectMentions(table)), 10);
+		Map<String, Integer> hashtags = trimMap(sortMap(collectHashtags(table)), 20);
+		Map<String, Integer> mentions = trimMap(sortMap(collectMentions(table)), 20);
 
 		System.out.println(hashtags.toString());
 		System.out.println(mentions.toString());
