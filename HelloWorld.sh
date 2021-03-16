@@ -2,5 +2,7 @@
 
 module load jdk/1.8.0_271
 
-echo "Running JAR file"
-srun --mem=1GB --time=00:01:00 --cpus-per-task=1 java -jar output/HelloWorld.jar
+echo "Compiling"
+srun --mem=8GB --time=00:20:00 --cpus-per-task=1 javac HelloWorld.java
+echo "Running"
+srun --mem=8GB --time=00:20:00 --cpus-per-task=1 java HelloWorld
