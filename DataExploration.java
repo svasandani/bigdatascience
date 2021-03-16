@@ -12,8 +12,8 @@ public class DataExploration {
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
-		HashMap<String, Integer> hashtags = trimHashmap(sortHashmap(collectHashtags(table)), 10);
-		HashMap<String, Integer> mentions = trimHashmap(sortHashmap(collectMentions(table)), 10);
+		Map<String, Integer> hashtags = trimMap(sortMap(collectHashtags(table)), 10);
+		Map<String, Integer> mentions = trimMap(sortMap(collectMentions(table)), 10);
 
 		System.out.println(hashtags.toString());
 		System.out.println(mentions.toString());
@@ -25,39 +25,39 @@ public class DataExploration {
 	}
 	
 	// https://stackoverflow.com/a/19671853
-	public static HashMap<String, Integer> sortHashmap(HashMap<String, Integer> unsortedMap) {
-		HashMap<String, Integer> sortedMap = 
+	public static LinkedHashMap<String, Integer> sortMap(LinkedHashMap<String, Integer> unsortedMap) {
+		LinkedHashMap<String, Integer> sortedMap = (LinkedHashMap<String, Integer>)
 			     unsortedMap.entrySet().stream()
-			    .sorted(Entry.comparingByValue())
-			    .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
-			                              (e1, e2) -> e1, LinkedHashMap::new));
+			    .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+			    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		
 		return sortedMap;
 	}
 	
 	// https://stackoverflow.com/a/42879527
-	public static HashMap<String, Integer> trimHashmap(HashMap<String, Integer> untrimmedMap, int length) {
-		HashMap<String, Integer> trimmedMap = (HashMap<String, Integer>) untrimmedMap.entrySet().stream()
+	public static Map<String, Integer> trimMap(LinkedHashMap<String, Integer> untrimmedMap, int length) {
+		LinkedHashMap<String, Integer> trimmedMap = (LinkedHashMap<String, Integer>) 
+				  untrimmedMap.entrySet().stream()
 				  .limit(length)
-				  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+				  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		
 		return trimmedMap;
 	}
 	
-	public static HashMap<String, Integer> collectHashtags(ArrayList<String[]> table) {
+	public static LinkedHashMap<String, Integer> collectHashtags(ArrayList<String[]> table) {
 		System.out.println("Collecting hashtags...");
 		
 		return collectPrefixedTokens(table, '#');
 	}
 	
-	public static HashMap<String, Integer> collectMentions(ArrayList<String[]> table) {
+	public static LinkedHashMap<String, Integer> collectMentions(ArrayList<String[]> table) {
 		System.out.println("Collecting mentions...");
 		
 		return collectPrefixedTokens(table, '@');
 	}
 	
-	public static HashMap<String, Integer> collectPrefixedTokens(ArrayList<String[]> table, char prefix) {		
-		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
+	public static LinkedHashMap<String, Integer> collectPrefixedTokens(ArrayList<String[]> table, char prefix) {		
+		LinkedHashMap<String, Integer> tokens = new LinkedHashMap<String, Integer>();
 		
 		for (String[] s : table) {
 			if (s.length <= TEXT_COLUMN) continue;
