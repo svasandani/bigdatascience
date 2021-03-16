@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.Map.*;
 import java.util.stream.*;
 
 public class DataExploration {
@@ -7,7 +8,7 @@ public class DataExploration {
 	final static int TEXT_COLUMN = 5;
 
 	public static void main(String[] args) throws FileNotFoundException {
-		CSVParser c = new CSVParser("sentiment140.csv");
+		CSVParser c = new CSVParser("sentiment500.csv");
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
@@ -17,10 +18,11 @@ public class DataExploration {
 			text += s[TEXT_COLUMN];
 		}
 		
-		HashMap<String, Integer> hashtags = collectHashtags(text);
-		HashMap<String, Integer> mentions = collectMentions(text);
-		
+		HashMap<String, Integer> hashtags = trimHashmap(sortHashmap(collectHashtags(text)), 10);
+		HashMap<String, Integer> mentions = trimHashmap(sortHashmap(collectMentions(text)), 10);
+
 		System.out.println(hashtags.toString());
+		System.out.println(mentions.toString());
 	}
 	
 	public static void putOrInc(HashMap<String, Integer> map, String key) {
@@ -28,38 +30,66 @@ public class DataExploration {
 		else map.put(key, 1);
 	}
 	
+	// https://stackoverflow.com/a/19671853
+	public static HashMap<String, Integer> sortHashmap(HashMap<String, Integer> unsortedMap) {
+		HashMap<String, Integer> sortedMap = 
+			     unsortedMap.entrySet().stream()
+			    .sorted(Entry.comparingByValue())
+			    .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
+			                              (e1, e2) -> e1, LinkedHashMap::new));
+		
+		return sortedMap;
+	}
+	
+	// https://stackoverflow.com/a/42879527
+	public static HashMap<String, Integer> trimHashmap(HashMap<String, Integer> untrimmedMap, int length) {
+		HashMap<String, Integer> trimmedMap = (HashMap<String, Integer>) untrimmedMap.entrySet().stream()
+				  .limit(length)
+				  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		
+		return trimmedMap;
+	}
+	
 	public static HashMap<String, Integer> collectHashtags(String text) {
-		HashMap<String, Integer> hashtags = new HashMap<String, Integer>();
+		System.out.println("Collecting hashtags...");
 		
-		String tmp = "";
-		boolean inHashtag = false;
-		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
-			
-			if (c == '#') {
-				if (inHashtag) {
-					putOrInc(hashtags, tmp);
-					tmp = "";
-				} else {
-					tmp += c;
-					inHashtag = true;
-				}
-			} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
-				if (inHashtag) {
-					putOrInc(hashtags, tmp);
-					tmp = "";
-					inHashtag = false;
-				}
-			} else {
-				if (inHashtag) tmp += c;
-			}
-		}
-		
-		return hashtags;
+		return collectPrefixedTokens(text, '#');
 	}
 	
 	public static HashMap<String, Integer> collectMentions(String text) {
-		return null;
+		System.out.println("Collecting mentions...");
+		
+		return collectPrefixedTokens(text, '@');
+	}
+	
+	public static HashMap<String, Integer> collectPrefixedTokens(String text, char prefix) {		
+		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
+		
+		String tmp = "";
+		boolean inToken = false;
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			
+			if (c == prefix) {
+				if (inToken) {
+					putOrInc(tokens, tmp);
+					tmp = "";
+				} else {
+					tmp += c;
+					inToken = true;
+				}
+			} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
+				if (inToken) {
+					putOrInc(tokens, tmp);
+					tmp = "";
+					inToken = false;
+				}
+			} else {
+				if (inToken) tmp += c;
+			}
+		}
+		
+		return tokens;
 	}
 }
 
