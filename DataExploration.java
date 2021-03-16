@@ -60,6 +60,8 @@ public class DataExploration {
 		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
 		
 		for (String[] s : table) {
+			if (s.length <= TEXT_COLUMN) continue;
+			
 			String text = s[TEXT_COLUMN];
 			
 			String tmp = "";
