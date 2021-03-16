@@ -12,16 +12,8 @@ public class DataExploration {
 		ArrayList<String[]> table = c.parse();
 //		c.preview(2);
 		
-		System.out.println("Separating text...");
-		
-		String text = "";
-		
-		for (String[] s : table) {
-			text += s[TEXT_COLUMN];
-		}
-		
-		HashMap<String, Integer> hashtags = trimHashmap(sortHashmap(collectHashtags(text)), 10);
-		HashMap<String, Integer> mentions = trimHashmap(sortHashmap(collectMentions(text)), 10);
+		HashMap<String, Integer> hashtags = trimHashmap(sortHashmap(collectHashtags(table)), 10);
+		HashMap<String, Integer> mentions = trimHashmap(sortHashmap(collectMentions(table)), 10);
 
 		System.out.println(hashtags.toString());
 		System.out.println(mentions.toString());
@@ -52,42 +44,46 @@ public class DataExploration {
 		return trimmedMap;
 	}
 	
-	public static HashMap<String, Integer> collectHashtags(String text) {
+	public static HashMap<String, Integer> collectHashtags(ArrayList<String[]> table) {
 		System.out.println("Collecting hashtags...");
 		
-		return collectPrefixedTokens(text, '#');
+		return collectPrefixedTokens(table, '#');
 	}
 	
-	public static HashMap<String, Integer> collectMentions(String text) {
+	public static HashMap<String, Integer> collectMentions(ArrayList<String[]> table) {
 		System.out.println("Collecting mentions...");
 		
-		return collectPrefixedTokens(text, '@');
+		return collectPrefixedTokens(table, '@');
 	}
 	
-	public static HashMap<String, Integer> collectPrefixedTokens(String text, char prefix) {		
+	public static HashMap<String, Integer> collectPrefixedTokens(ArrayList<String[]> table, char prefix) {		
 		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
 		
-		String tmp = "";
-		boolean inToken = false;
-		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
+		for (String[] s : table) {
+			String text = s[TEXT_COLUMN];
 			
-			if (c == prefix) {
-				if (inToken) {
-					putOrInc(tokens, tmp);
-					tmp = "";
+			String tmp = "";
+			boolean inToken = false;
+			for (int i = 0; i < text.length(); i++) {
+				char c = text.charAt(i);
+				
+				if (c == prefix) {
+					if (inToken) {
+						putOrInc(tokens, tmp);
+						tmp = "";
+					} else {
+						tmp += c;
+						inToken = true;
+					}
+				} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
+					if (inToken) {
+						putOrInc(tokens, tmp);
+						tmp = "";
+						inToken = false;
+					}
 				} else {
-					tmp += c;
-					inToken = true;
+					if (inToken) tmp += c;
 				}
-			} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
-				if (inToken) {
-					putOrInc(tokens, tmp);
-					tmp = "";
-					inToken = false;
-				}
-			} else {
-				if (inToken) tmp += c;
 			}
 		}
 		
