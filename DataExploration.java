@@ -79,7 +79,7 @@ public class DataExploration {
 					}
 				} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
 					if (inToken) {
-						putOrInc(tokens, tmp);
+						if (tmp.length() > 1) putOrInc(tokens, tmp);
 						tmp = "";
 						inToken = false;
 					}
