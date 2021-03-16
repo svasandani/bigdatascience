@@ -116,6 +116,12 @@ class CSVParser {
 		while (naiveIndex < naive.length) {
 			String token = naive[naiveIndex];
 			
+			if (token.length() == 0) {
+				naiveIndex++;
+				nonNaiveIndex++;
+				continue;
+			}
+			
 			if (!quotes) {
 				if (token.charAt(0) == '\"') {
 					naive[nonNaiveIndex] = token;
