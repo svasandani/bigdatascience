@@ -1,7 +1,5 @@
 import java.io.*;
 import java.util.*;
-import java.util.Map.*;
-import java.util.stream.*;
 
 public class DataExploration {
 	

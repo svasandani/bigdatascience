@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,4 +30,70 @@ public class Util {
 		return trimmedMap;
 	}
 	
+	public static String[] removeStopwords(String[] textArray, String[] EXCLUDE) {
+		int excludedLength = 0;
+		for (String str : textArray) {
+			boolean excludeString = false;
+			
+			for (int k = 0; k < EXCLUDE.length; k++) {
+				if (str.toLowerCase().equals(EXCLUDE[k])) excludeString = true;
+			}
+			
+			if (!excludeString) {
+				excludedLength++;
+			}
+		}
+		
+		String[] excludedTextArray = new String[excludedLength];
+		int excludedIndex = 0;
+		for (String str : textArray) {
+			boolean excludeString = false;
+					
+			for (int k = 0; k < EXCLUDE.length; k++) {
+				if (str.toLowerCase().equals(EXCLUDE[k])) excludeString = true;
+			}
+			
+			if (!excludeString) {
+				excludedTextArray[excludedIndex] = str;
+				excludedIndex++;
+			}
+		}
+		
+		return excludedTextArray;
+	}
+	
+	public static String removeNonAlphanumeric(String text) {
+		String cleanedString = "";
+		
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			
+			if (Character.isDigit(c) || Character.isLetter(c) || c == ' ')
+				cleanedString += c;
+		}
+		
+		return cleanedString;
+	}
+	
+	public static String removePrefixedTokens(String text, char prefix) {		
+		String cleanedString = "";
+		
+		boolean inToken = false;
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			
+			if (c == prefix) {
+				if (!inToken) {
+					inToken = true;
+				}
+			} else if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
+				if (inToken) inToken = false;
+				else cleanedString += c;
+			} else {
+				if (!inToken) cleanedString += c;
+			}
+		}
+		
+		return cleanedString;
+	}
 }
