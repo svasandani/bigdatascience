@@ -65,8 +65,10 @@ public class NgramAnalysis {
 			String[] textArray = s[TEXT_COLUMN].split(" ");
 			
 			// remove quotation marks from CSV
-			textArray[0] = textArray[0].substring(1);
-			textArray[textArray.length - 1] = textArray[textArray.length - 1]
+			if (textArray[0].length() > 0) 
+				textArray[0] = textArray[0].substring(1);
+			if (textArray[textArray.length - 1].length() > 0) 
+				textArray[textArray.length - 1] = textArray[textArray.length - 1]
 					.substring(0, textArray[textArray.length - 1].length() - 1);
 			
 			String[] excludedTextArray = removeStopwords(textArray);
