@@ -97,14 +97,14 @@ public class Util {
 		return cleanedString;
 	}
 	
-	public static void printProgressBar(int current, int total) {
+	public static void printProgressBar(int current, int total, int size) {
 		System.out.print("[");
 		
 		double percent = ((double) current) / total;
-		int normalized = (int) (percent * 20);
+		int normalized = (int) (percent * size);
 		
 		for (int i = 0; i < normalized; i++) System.out.print("=");
-		for (int i = 0; i < 20 - normalized; i++) System.out.print(" ");
+		for (int i = 0; i < size - normalized; i++) System.out.print(" ");
 		
 		System.out.print("]\r");
 		

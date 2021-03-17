@@ -64,7 +64,7 @@ public class RuleBasedKeywordExtraction {
 	        
 	        nounText.add(nounString);
 	        
-	        Util.printProgressBar(line, totalLines);
+	        Util.printProgressBar(line, totalLines, 40);
 	        
 	        line++;
         }
