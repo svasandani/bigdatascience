@@ -57,6 +57,8 @@ public class NgramAnalysis {
 	}
 	
 	public static LinkedHashMap<String, Integer> collectNgrams(ArrayList<String[]> table, int n) {
+		System.out.printf("Collecting %s-grams...\n", n);
+		
 		LinkedHashMap<String, Integer> nGrams = new LinkedHashMap<String, Integer>();
 		
 		for (String[] s : table) {
