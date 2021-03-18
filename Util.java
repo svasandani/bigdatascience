@@ -98,15 +98,16 @@ public class Util {
 	}
 	
 	public static void printProgressBar(int current, int total, int size) {
-		System.out.print("[");
+		String progressBar = "[";
 		
 		double percent = ((double) current) / total;
 		int normalized = (int) (percent * size);
 		
-		for (int i = 0; i < normalized; i++) System.out.print("=");
-		for (int i = 0; i < size - normalized; i++) System.out.print(" ");
+		for (int i = 0; i < normalized; i++) progressBar += "=";
+		for (int i = 0; i < size - normalized; i++) progressBar += " ";
 		
-		System.out.print("]\r");
+		progressBar += "]\r";
 		
+		System.out.print(progressBar);		
 	}
 }
