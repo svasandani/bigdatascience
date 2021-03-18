@@ -7,4 +7,4 @@ for file in `find /scratch/sav339/keyword_extraction/stanford-corenlp-4.2.0/ -na
 echo "Compiling"
 srun --mem=8GB --time=00:20:00 --cpus-per-task=1 javac POSTagger.java
 echo "Running"
-srun --mem=8GB --time=00:30:00 --cpus-per-task=1 java POSTagger
+srun --mem=8GB --time=01:00:00 --cpus-per-task=1 java POSTagger
