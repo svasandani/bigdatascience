@@ -10,4 +10,5 @@ Make sure to run the following commands on a Bash shell on NYU HPC's Greene clus
     $ ./NgramAnalysis.sh
 
 ### Keyword extraction
-    $ ./KeywordExtraction.sh
+#### POS tagging
+    $ ./POSTagger.sh

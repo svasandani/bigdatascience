@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
+
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class Util {
 	public static void putOrInc(HashMap<String, Integer> map, String key) {
@@ -28,6 +31,14 @@ public class Util {
 				  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		
 		return trimmedMap;
+	}
+	
+	public static boolean isInArray(String text, String[] test) {
+		for (String s : test) {
+			if (s.equals(text)) return true;
+		}
+		
+		return false;
 	}
 	
 	public static String[] removeStopwords(String[] textArray, String[] EXCLUDE) {
@@ -95,6 +106,15 @@ public class Util {
 		}
 		
 		return cleanedString;
+	}
+	
+	public static StanfordCoreNLP buildPipeline(String annotators) {
+		// set up pipeline properties
+        Properties props = new Properties();
+        // set the list of annotators to run
+        props.setProperty("annotators", annotators);
+        // build pipeline
+        return new StanfordCoreNLP(props);
 	}
 	
 	public static void printProgressBar(int current, int total, int size) {
