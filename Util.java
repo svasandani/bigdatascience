@@ -130,4 +130,14 @@ public class Util {
 		
 		System.out.print(progressBar);		
 	}
+	
+	public static String cleaningPipeline(String text) {
+		return removeNonAlphanumeric(
+			       removePrefixedTokens(
+			           removePrefixedTokens(
+			               text
+			           ,'@')
+			       ,'#')
+			   );
+	}
 }

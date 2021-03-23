@@ -58,7 +58,7 @@ public class POSTagger {
 			for (String[] s : table) {
 	        	if (s.length <= TEXT_COLUMN) continue;
 				
-				String text = cleaningPipeline(s[TEXT_COLUMN]);
+				String text = Util.cleaningPipeline(s[TEXT_COLUMN]);
 				
 		        // create a document object
 		        CoreDocument document = pipeline.processToCoreDocument(text);
@@ -111,7 +111,7 @@ public class POSTagger {
         for (String[] s : table) {
         	if (s.length <= TEXT_COLUMN) continue;
 			
-			String text = cleaningPipeline(s[TEXT_COLUMN]);
+			String text = Util.cleaningPipeline(s[TEXT_COLUMN]);
 			
 	        // create a document object
 	        CoreDocument document = pipeline.processToCoreDocument(text);
@@ -140,16 +140,6 @@ public class POSTagger {
         }
         
         return nounText;
-	}
-	
-	public static String cleaningPipeline(String text) {
-		return Util.removeNonAlphanumeric(
-			       Util.removePrefixedTokens(
-			           Util.removePrefixedTokens(
-			               text
-			           ,'@')
-			       ,'#')
-			   );
 	}
 
 }
