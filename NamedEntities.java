@@ -24,7 +24,7 @@ public class NamedEntities {
 		String[][][] nerPatterns = {
 				{{"People"}, {"PERSON"}}, // People
 				{{"Organizations"}, {"ORGANIZATION"}}, // Persons
-				{{"Placces"}, {"LOCATION", "STATE_OR_PROVINCE"}}, // Persons
+				{{"Places"}, {"LOCATION", "STATE_OR_PROVINCE"}}, // Persons
 				};
 		
 		LinkedHashMap<String, Integer>[] nerPatternResults = collectNamedEntities(pipeline, table, nerPatterns);
@@ -38,43 +38,41 @@ public class NamedEntities {
 			StanfordCoreNLP pipeline, 
 			ArrayList<String[]> table, 
 			String[][][] nerPatterns) {
-		System.out.printf("Collecting named entities");
+		System.out.printf("Collecting named entities\n");
 		LinkedHashMap<String, Integer>[] nerMap = new LinkedHashMap[nerPatterns.length];
 		
 		int line = 0;
-		int patternIndex = 0;
-        int totalLines = table.size() * nerPatterns.length;
+        int totalLines = table.size();
         
-        for (String[][] pattern : nerPatterns) {
-			System.out.printf("Collecting %s\n", pattern[0][0]);
-    		LinkedHashMap<String, Integer> namedEntities = new LinkedHashMap<String, Integer>();
-    		
-        	for (String[] s : table) {
-    			if (s.length <= TEXT_COLUMN) continue;
-    			
-    			String text = Util.cleaningPipeline(s[TEXT_COLUMN]);
-    			
-    	        // create a document object
-    	        CoreDocument document = pipeline.processToCoreDocument(text);
-    	        
-    	        for (CoreSentence cs : document.sentences()) {
-    	        	List<String> nerTags = cs.nerTags();
-    	        	List<String> tokens = cs.tokensAsStrings();
-    	        	
-    	        	for (int i = 0; i < nerTags.size(); i++) {
-    	        		if (Util.isInArray(nerTags.get(i), pattern[1]))
-    	        			Util.putOrInc(namedEntities, tokens.get(i));
-    	        	}
-    	        }
-    	        
-    	        Util.printProgressBar(line, totalLines, 40);
-    	        
-    	        line++;
-    		}
-			
-			nerMap[patternIndex] = namedEntities;
-			patternIndex++;
+        for (int i = 0; i < nerPatterns.length; i++) {
+			System.out.printf("Generating map for %s\n", nerPatterns[i][0][0]);
+    		nerMap[i] = new LinkedHashMap<String, Integer>();
         }
+    		
+    	for (String[] s : table) {
+			if (s.length <= TEXT_COLUMN) continue;
+			
+			String text = Util.cleaningPipeline(s[TEXT_COLUMN]);
+			
+	        // create a document object
+	        CoreDocument document = pipeline.processToCoreDocument(text);
+	        
+	        for (CoreSentence cs : document.sentences()) {
+	        	List<String> nerTags = cs.nerTags();
+	        	List<String> tokens = cs.tokensAsStrings();
+	        	
+	        	for (int i = 0; i < nerTags.size(); i++) {
+	        		for (int j = 0; j < nerMap.length; j++) {
+	        			if (Util.isInArray(nerTags.get(i), nerPatterns[j][1]))
+		        			Util.putOrInc(nerMap[j], tokens.get(i));
+	        		}
+	        	}
+	        }
+	        
+	        Util.printProgressBar(line, totalLines, 40);
+	        
+	        line++;
+		}
 		
 		return nerMap;
 	}
