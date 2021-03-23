@@ -23,7 +23,7 @@ public class NamedEntities {
 		
 		String[][][] nerPatterns = {
 				{{"People"}, {"PERSON"}}, // People
-				{{"People and organizations"}, {"PERSON", "ORGANIZATION"}}, // Persons
+				{{"Organizations"}, {"ORGANIZATION"}}, // Persons
 				{{"Placces"}, {"LOCATION", "STATE_OR_PROVINCE"}}, // Persons
 				};
 		
