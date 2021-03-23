@@ -21,7 +21,7 @@ public class DependencyParser {
 		// Dependency parse
 		
 		String[][][] depPatterns = {
-				{{"nsubj root dobj"}, {"nsubj", "root", "dobj"}}, // nsubj root dobj
+				{{"nsubj root obj"}, {"nsubj", "root", "obj"}}, // nsubj root dobj
 				};
 		
 		LinkedHashMap<String, Integer>[] depPatternResults = collectDependencyPatterns(pipeline, table, depPatterns);
@@ -110,42 +110,6 @@ public class DependencyParser {
 		    	    		Util.putOrInc(patternMap, tmp);
 		    	    	}
 		    	    }
-		    	    
-		    	    /*
-		    	    for (int i = 1; i <= cs.tokens().size() - pattern[1].length; i++) {
-		    	    	boolean inPattern = true;
-		    	    	String tmp = dependencyParse.getNodeByIndex(i).word() + " ";
-		    	    	
-		    	    	for (int j = 0; j < pattern[1].length && inPattern; j++) {
-		    	    		tmp += dependencyParse.getNodeByIndex(i + j + 1).word() + " ";
-		    	    		
-		    	    		SemanticGraphEdge forwardEdge = 
-		    	    				dependencyParse
-			    	    				.getEdge(
-			    	    						dependencyParse.getNodeByIndex(i + j), 
-			    	    						dependencyParse.getNodeByIndex(i + j + 1)
-			    	    						);
-		    	    		SemanticGraphEdge backwardEdge = 
-		    	    				dependencyParse
-			    	    				.getEdge(
-			    	    						dependencyParse.getNodeByIndex(i + j + 1), 
-			    	    						dependencyParse.getNodeByIndex(i + j)
-			    	    						);
-		    	    		
-		    	    		if (!
-		    	    				(forwardEdge != null && 
-		    	    				forwardEdge.getRelation().toString().equals(pattern[1][j]))
-		    	    				||
-		    	    				(backwardEdge != null && 
-		    	    						backwardEdge.getRelation().toString().equals(pattern[1][j]))
-		    	    			) inPattern = false;
-		    	    	}
-		    	    	
-		    	    	if (inPattern) {
-		    	    		Util.putOrInc(patternMap, tmp);
-		    	    	}
-		    	    }
-		    	    */
 		        }
 		        
 		        Util.printProgressBar(line, totalLines, 40);
